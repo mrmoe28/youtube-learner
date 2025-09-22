@@ -331,7 +331,7 @@ function CourseDisplay({ course, videoThumbnail }: CourseDisplayProps) {
                             Learning Objective (What You'll Achieve)
                           </h5>
                           <div className="bg-gray-50 p-4 rounded-lg border-l-2 border-gray-400">
-                            <p className="text-gray-700 font-medium">By the end of this module, you will be able to:</p>
+                            <p className="text-gray-800 font-medium">By the end of this module, you will be able to:</p>
                             <p className="text-gray-700 mt-2">{chapter.content}</p>
                           </div>
                         </div>
@@ -398,7 +398,7 @@ function CourseDisplay({ course, videoThumbnail }: CourseDisplayProps) {
                                     {isDetailedPoint && point.steps ? (
                                       <div className="space-y-4">
                                         {/* Step-by-Step Instructions */}
-                                        <div className="bg-gray-600 p-4 rounded-lg">
+                                        <div className="bg-gray-800 p-4 rounded-lg border border-gray-600">
                                           <div className="font-semibold text-white mb-3">Step-by-Step Instructions:</div>
                                           <div className="space-y-4">
                                             {point.steps.map((step, stepIndex) => (
@@ -438,9 +438,9 @@ function CourseDisplay({ course, videoThumbnail }: CourseDisplayProps) {
                                         {point.commands && point.commands.length > 0 && (
                                           <div className="space-y-3">
                                             {point.commands.map((command, cmdIndex) => (
-                                              <div key={cmdIndex} className="bg-gray-600 rounded-xl overflow-hidden shadow-lg border border-gray-500">
+                                              <div key={cmdIndex} className="bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-600">
                                                 {/* Terminal Header */}
-                                                <div className="bg-gray-500 px-4 py-2 flex items-center justify-between border-b border-gray-400">
+                                                <div className="bg-gray-700 px-4 py-2 flex items-center justify-between border-b border-gray-600">
                                                   <div className="flex items-center space-x-2">
                                                     <div className="flex space-x-1">
                                                       <div className="w-3 h-3 rounded-full bg-red-500"></div>
@@ -473,9 +473,9 @@ function CourseDisplay({ course, videoThumbnail }: CourseDisplayProps) {
                                                   </button>
                                                 </div>
                                                 {/* Terminal Content */}
-                                                <div className="px-4 py-4 bg-gray-600">
+                                                <div className="px-4 py-4 bg-gray-900">
                                                   <div className="font-mono text-base">
-                                                    <span className="text-green-300 font-bold text-lg">$</span>
+                                                    <span className="text-green-400 font-bold text-lg">$</span>
                                                     <span className="text-white ml-2 font-medium">{command}</span>
                                                   </div>
                                                 </div>

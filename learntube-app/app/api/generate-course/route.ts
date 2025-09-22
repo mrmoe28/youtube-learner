@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { fetchTranscript } from 'youtube-transcript-plus'
+import { YoutubeTranscript } from 'youtube-transcript'
 import OpenAI from 'openai'
 
 // Initialize OpenAI (you'll need to set OPENAI_API_KEY in your environment)
@@ -14,36 +15,140 @@ function extractVideoId(url: string): string | null {
   return match ? match[1] : null
 }
 
-// Function to get video transcript
+// Function to preprocess transcript text
+function preprocessTranscript(rawTranscript: string): string {
+  return rawTranscript
+    .replace(/\[.*?\]/g, '') // Remove [Music], [Applause], etc.
+    .replace(/\b(um|uh|like|you know)\b/gi, '') // Remove filler words
+    .replace(/\s+/g, ' ') // Normalize whitespace
+    .trim()
+}
+
+// Function to get video transcript with multiple fallbacks
 async function getTranscript(videoId: string): Promise<string> {
+  console.log('Fetching transcript for video ID:', videoId)
+
+  // Define fallback methods in order of preference
+  const transcriptMethods = [
+    {
+      name: 'youtube-transcript-plus',
+      fetch: async () => {
+        const transcript = await fetchTranscript(videoId)
+        return transcript?.map((segment: any) => segment.text || segment.content || '').join(' ')
+      }
+    },
+    {
+      name: 'youtube-transcript',
+      fetch: async () => {
+        const transcript = await YoutubeTranscript.fetchTranscript(videoId)
+        return transcript?.map((segment: any) => segment.text || '').join(' ')
+      }
+    }
+  ]
+
+  let lastError: Error | null = null
+
+  // Try each method until one succeeds
+  for (const method of transcriptMethods) {
+    try {
+      console.log(`Trying ${method.name}...`)
+      const rawTranscript = await method.fetch()
+
+      if (!rawTranscript || rawTranscript.length < 50) {
+        throw new Error(`${method.name}: Transcript too short or empty (${rawTranscript?.length || 0} chars)`)
+      }
+
+      // Preprocess the transcript
+      const processedTranscript = preprocessTranscript(rawTranscript)
+
+      if (processedTranscript.length < 50) {
+        throw new Error(`${method.name}: Processed transcript too short (${processedTranscript.length} chars)`)
+      }
+
+      console.log(`✅ Success with ${method.name}! Transcript length: ${processedTranscript.length}`)
+      return processedTranscript
+
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error'
+      console.log(`❌ ${method.name} failed: ${errorMsg}`)
+      lastError = error instanceof Error ? error : new Error(errorMsg)
+      continue
+    }
+  }
+
+  // If all methods failed, throw the last error
+  console.error('All transcript extraction methods failed')
+  throw new Error(`Could not fetch video transcript. Last error: ${lastError?.message || 'All methods failed'}`)
+}
+
+// Function to validate course content quality
+function validateCourseContent(courseData: any, transcript: string): number {
+  let score = 0
+  let totalChecks = 0
+
   try {
-    console.log('Fetching transcript for video ID:', videoId)
-
-    // Try youtube-transcript-plus
-    const transcript = await fetchTranscript(videoId)
-
-    console.log('Raw transcript data:', transcript?.length || 0, 'items')
-
-    if (!transcript || transcript.length === 0) {
-      throw new Error('No transcript data returned')
+    // Check 1: Does the course have required structure?
+    totalChecks++
+    if (courseData.title && courseData.chapters && courseData.keyConcepts && courseData.quiz) {
+      score += 20
     }
 
-    // Extract text from transcript segments
-    const transcriptText = transcript
-      .map((segment: any) => segment.text || segment.content || '')
-      .filter((text: string) => text.trim().length > 0)
-      .join(' ')
-
-    console.log('Processed transcript length:', transcriptText.length)
-
-    if (transcriptText.length < 50) {
-      throw new Error('Transcript too short or empty')
+    // Check 2: Are there enough key concepts?
+    totalChecks++
+    if (courseData.keyConcepts && courseData.keyConcepts.length >= 8) {
+      score += 15
     }
 
-    return transcriptText
+    // Check 3: Do chapters have substantive content?
+    totalChecks++
+    if (courseData.chapters && courseData.chapters.length > 0) {
+      const avgContentLength = courseData.chapters.reduce((sum: number, ch: any) =>
+        sum + (ch.content?.length || 0), 0) / courseData.chapters.length
+      if (avgContentLength > 200) {
+        score += 15
+      }
+    }
+
+    // Check 4: Do key concepts appear in transcript?
+    totalChecks++
+    if (courseData.keyConcepts) {
+      const transcriptLower = transcript.toLowerCase()
+      const foundConcepts = courseData.keyConcepts.filter((concept: string) =>
+        transcriptLower.includes(concept.toLowerCase().split(' ')[0])
+      )
+      const conceptMatch = (foundConcepts.length / courseData.keyConcepts.length) * 20
+      score += Math.min(conceptMatch, 20)
+    }
+
+    // Check 5: Are there quiz questions?
+    totalChecks++
+    if (courseData.quiz && courseData.quiz.length >= 3) {
+      score += 15
+    }
+
+    // Check 6: Do keyPoints have actionable steps?
+    totalChecks++
+    if (courseData.chapters) {
+      let hasActionableSteps = false
+      for (const chapter of courseData.chapters) {
+        if (chapter.keyPoints && Array.isArray(chapter.keyPoints)) {
+          for (const keyPoint of chapter.keyPoints) {
+            if (keyPoint.steps && keyPoint.steps.length >= 3) {
+              hasActionableSteps = true
+              break
+            }
+          }
+        }
+      }
+      if (hasActionableSteps) {
+        score += 15
+      }
+    }
+
+    return Math.min(score, 100)
   } catch (error) {
-    console.error('Error fetching transcript:', error)
-    throw new Error(`Could not fetch video transcript: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    console.error('Error validating course content:', error)
+    return 50 // Default score if validation fails
   }
 }
 
@@ -167,7 +272,7 @@ async function generateCourse(transcript: string, videoTitle?: string): Promise<
 
   try {
     const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4o-mini',
       messages: [
         {
           role: 'system',
@@ -178,8 +283,8 @@ async function generateCourse(transcript: string, videoTitle?: string): Promise<
           content: prompt
         }
       ],
-      max_tokens: 4000,
-      temperature: 0.7,
+      max_tokens: 8000,
+      temperature: 0.6,
     })
 
     const content = response.choices[0]?.message?.content
@@ -204,6 +309,14 @@ async function generateCourse(transcript: string, videoTitle?: string): Promise<
     jsonContent = jsonContent.trim()
 
     const courseData = JSON.parse(jsonContent)
+
+    // Validate course content quality
+    const validationScore = validateCourseContent(courseData, transcript)
+    console.log(`Course validation score: ${validationScore}%`)
+
+    // Add validation score to response
+    courseData.qualityScore = validationScore
+
     return courseData
   } catch (error) {
     console.error('Error generating course:', error)

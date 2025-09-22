@@ -87,7 +87,7 @@ export default function Home() {
                 placeholder="Paste YouTube URL here..."
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                className="input-highlight flex-grow px-6 py-4 rounded-l-lg focus:outline-none text-gray-800"
+                className="input-highlight flex-grow px-6 py-4 rounded-l-lg focus:outline-none"
                 disabled={loading}
               />
               <button

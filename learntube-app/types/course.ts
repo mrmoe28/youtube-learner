@@ -45,6 +45,7 @@ export interface Course {
   keyConcepts: string[]
   summary: string
   quiz: QuizQuestion[]
+  qualityScore?: number
 }
 
 // API response types

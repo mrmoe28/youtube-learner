@@ -185,14 +185,30 @@ body {
 
 /* Forms */
 .input-highlight {
+  background-color: #ffffff;
+  color: #1f2937;
   transition: all 0.3s ease;
-  border: 1px solid #d1d5db;
+  border: 2px solid #d1d5db;
   outline: none;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.input-highlight::placeholder {
+  color: #6b7280;
+  font-weight: 400;
 }
 
 .input-highlight:focus {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5);
   border-color: #4f46e5;
+  background-color: #ffffff;
+}
+
+.input-highlight:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
 }
 
 /* Buttons */
