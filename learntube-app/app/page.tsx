@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import CourseDisplay from '@/components/CourseDisplay'
+import CourseDisplaySimplified from '@/components/CourseDisplaySimplified'
 import type { Course, CourseResponse, ErrorResponse } from '@/types/course'
 
 const getErrorMessage = (error: any): string => {
@@ -121,7 +121,7 @@ export default function Home() {
       {course && (
         <div className="bg-yellow-100 border-2 border-yellow-500 p-3 m-2">
           <h2 className="text-2xl font-bold text-black mb-4">COURSE CONTENT DETECTED!</h2>
-          <CourseDisplay course={course} videoThumbnail={videoThumbnail} />
+          <CourseDisplaySimplified course={course} videoThumbnail={videoThumbnail} />
         </div>
       )}
 
@@ -136,7 +136,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md-grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             <div className="course-card bg-white p-8 rounded-xl shadow-lg text-center">
               <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -173,7 +173,7 @@ export default function Home() {
       {/* Preview Section */}
       <div className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="grid md-grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl font-bold mb-6">Everything You Need to Learn</h2>
               <ul className="space-y-4">

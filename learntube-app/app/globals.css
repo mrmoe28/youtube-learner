@@ -247,9 +247,9 @@ button:disabled {
 
 /* Responsive design */
 @media (min-width: 768px) {
-  .md-grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-  .md-grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-  .md-w-1-2 { width: 50%; }
-  .md-flex-row { flex-direction: row; }
-  .md-mb-0 { margin-bottom: 0; }
+  .md\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .md\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .md\:w-1\/2 { width: 50%; }
+  .md\:flex-row { flex-direction: row; }
+  .md\:mb-0 { margin-bottom: 0; }
 }
