@@ -1,19 +1,183 @@
-<!doctype html>
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<title>My static Space</title>
-		<link rel="stylesheet" href="style.css" />
-	</head>
-	<body>
-		<div class="card">
-			<h1>Welcome to your static Space!</h1>
-			<p>You can modify this app directly by editing <i>index.html</i> in the Files and versions tab.</p>
-			<p>
-				Also don't forget to check the
-				<a href="https://huggingface.co/docs/hub/spaces" target="_blank">Spaces documentation</a>.
-			</p>
-		</div>
-	</body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnTube - Create Courses from YouTube Videos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .course-card {
+            transition: all 0.3s ease;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .input-highlight {
+            transition: all 0.3s ease;
+        }
+        .input-highlight:focus {
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Hero Section -->
+    <div class="gradient-bg text-white min-h-screen flex items-center">
+        <div class="container mx-auto px-6 py-24 text-center">
+            <h1 class="text-5xl font-bold mb-6" data-aos="fade-down">Transform YouTube Videos into Learning Courses</h1>
+            <p class="text-xl mb-12 max-w-2xl mx-auto" data-aos="fade-down" data-aos-delay="100">
+                Paste any YouTube URL and instantly get a structured course with key concepts, summaries, and quizzes.
+            </p>
+            
+            <div class="max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+                <div class="flex">
+                    <input 
+                        type="text" 
+                        placeholder="Paste YouTube URL here..." 
+                        class="input-highlight flex-grow px-6 py-4 rounded-l-lg focus:outline-none text-gray-800"
+                    >
+                    <button class="bg-indigo-700 hover:bg-indigo-800 px-8 py-4 rounded-r-lg font-semibold transition duration-300">
+                        <i data-feather="play" class="inline mr-2"></i> Create Course
+                    </button>
+                </div>
+                <p class="text-sm mt-3 opacity-80">Try with any educational YouTube video</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-16" data-aos="fade-up">How LearnTube Works</h2>
+            
+            <div class="grid md:grid-cols-3 gap-12">
+                <div class="course-card bg-gray-50 p-8 rounded-xl" data-aos="fade-up" data-aos-delay="100">
+                    <div class="bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                        <i data-feather="link" class="text-indigo-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">1. Paste YouTube URL</h3>
+                    <p class="text-gray-600">Simply copy and paste any YouTube video link into our platform.</p>
+                </div>
+                
+                <div class="course-card bg-gray-50 p-8 rounded-xl" data-aos="fade-up" data-aos-delay="200">
+                    <div class="bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                        <i data-feather="cpu" class="text-indigo-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">2. AI Analyzes Content</h3>
+                    <p class="text-gray-600">Our AI processes the video transcript to identify key concepts and structure.</p>
+                </div>
+                
+                <div class="course-card bg-gray-50 p-8 rounded-xl" data-aos="fade-up" data-aos-delay="300">
+                    <div class="bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                        <i data-feather="book-open" class="text-indigo-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">3. Get Structured Course</h3>
+                    <p class="text-gray-600">Receive a complete learning course with summaries, key points, and quizzes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Section -->
+    <div class="py-24 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-12 md:mb-0" data-aos="fade-right">
+                    <h2 class="text-3xl font-bold mb-6">From Video to Learning Experience</h2>
+                    <p class="text-gray-600 mb-6">
+                        LearnTube transforms passive video watching into an active learning experience. Our AI extracts the most valuable information and presents it in an optimized format for retention.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i data-feather="check" class="text-green-500 mr-2 mt-1"></i>
+                            <span>Automatic chapter segmentation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-feather="check" class="text-green-500 mr-2 mt-1"></i>
+                            <span>Key concept extraction</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-feather="check" class="text-green-500 mr-2 mt-1"></i>
+                            <span>Personalized quizzes</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-feather="check" class="text-green-500 mr-2 mt-1"></i>
+                            <span>Progress tracking</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="md:w-1/2" data-aos="fade-left">
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <div class="bg-gray-200 h-64 rounded-lg mb-4 flex items-center justify-center">
+                            <i data-feather="youtube" class="text-red-500 w-16 h-16"></i>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="h-4 bg-gray-200 rounded w-full"></div>
+                            <div class="h-4 bg-gray-200 rounded w-5/6"></div>
+                            <div class="h-4 bg-gray-200 rounded w-2/3"></div>
+                            <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                        </div>
+                        <div class="mt-6 pt-6 border-t border-gray-200">
+                            <div class="flex justify-between">
+                                <button class="px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg">Key Concepts</button>
+                                <button class="px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg">Summary</button>
+                                <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg">Quiz</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="gradient-bg text-white py-20">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold mb-6" data-aos="fade-down">Ready to Transform Videos into Knowledge?</h2>
+            <p class="text-xl mb-10 max-w-2xl mx-auto" data-aos="fade-down" data-aos-delay="100">
+                Start creating personalized courses from any YouTube video in seconds.
+            </p>
+            <button class="bg-white text-indigo-700 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition duration-300" data-aos="fade-up">
+                <i data-feather="play-circle" class="inline mr-2"></i> Try It Now - Free
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold text-white mb-2">LearnTube</h3>
+                    <p class="text-sm">Transforming videos into learning experiences</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-white transition"><i data-feather="twitter"></i></a>
+                    <a href="#" class="hover:text-white transition"><i data-feather="github"></i></a>
+                    <a href="#" class="hover:text-white transition"><i data-feather="linkedin"></i></a>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-sm text-center">
+                © 2023 LearnTube. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+        feather.replace();
+    </script>
+</body>
 </html>
